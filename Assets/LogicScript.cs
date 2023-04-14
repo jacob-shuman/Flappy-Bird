@@ -8,14 +8,16 @@ public class LogicScript : MonoBehaviour
 {
     public int playerScore;
     public Text scoreText;
-
     public GameObject gameOverScreen;
+    public AudioSource audioSource;
+    public AudioClip pointAudio;
 
     [ContextMenu("Increment Score")]
     public void AddScore(int scoreToAdd)
     {
         playerScore += scoreToAdd;
         scoreText.text = playerScore.ToString();
+        audioSource.PlayOneShot(pointAudio);
     }
 
     public void RestartGame()

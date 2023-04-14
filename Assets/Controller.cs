@@ -5,6 +5,18 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip flapAudio;
+
+    [SerializeField]
+    private AudioClip hitAudio;
+
+    [SerializeField]
+    private AudioClip deathAudio;
+
+    [SerializeField]
     private Rigidbody2D rigidBody;
 
     [SerializeField]
@@ -23,21 +35,31 @@ public class Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y > 5 || transform.position.y < -5)
+        if (birdIsAlive)
         {
-            birdIsAlive = false;
-            logic.EndGame();
-        }
+            if (transform.position.y > 5 || transform.position.y < -5)
+            {
+                EndGame();
+            }
 
-        if (Input.GetKeyDown(KeyCode.Space) && birdIsAlive)
-        {
-            rigidBody.velocity = Vector2.up * flapStrength;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rigidBody.velocity = Vector2.up * flapStrength;
+                audioSource.PlayOneShot(flapAudio);
+            }
         }
     }
 
     private void OnCollisionEnter2D()
     {
+        audioSource.PlayOneShot(hitAudio);
+        EndGame();
+    }
+
+    void EndGame()
+    {
         birdIsAlive = false;
         logic.EndGame();
+        audioSource.PlayOneShot(deathAudio);
     }
 }
